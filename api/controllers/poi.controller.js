@@ -1,35 +1,53 @@
-import db from '../models/poi.model';
+import {MongoClient} from 'mongodb';
+
+const uri = "mongodb+srv://zupuser:zupuser@kpotzdb-4ygp2.mongodb.net/test?retryWrites=true";
 
 function add(req, res){
-  db.zupdb.insertOne(req.body, (err, result) => {
-    if (err) return console.log(err);
+  var db;
+  MongoClient.connect(uri, { useNewUrlParser: true }).then(function(client){
+    db = client.db('zupdb').collection('pois');
+    db.insertOne(req.body, (err, result) => {
+      if (err) return console.log(err);
 
-    res.send("Success: POI added.");
-
+      res.send("Success: POI added.");
+    })
+  }).catch(function(err){
+    console.log(err);
   })
 }
 
 function findAll(req, res){
-  db.zupdb.find().toArray((err, results) => {
+  var db;
+  MongoClient.connect(uri, { useNewUrlParser: true }).then(function(client){
+    db = client.db('zupdb').collection('pois');
+    db.find().toArray((err, results) => {
       if (err) return console.log(err);
 
       res.send(results);
+    })
+  }).catch(function(err){
+    console.log(err);
   })
 }
 
 function findNear(req, res){
-  var poi_coordinate = req.body;
-
-  db.zupdb.find({
-    coordinates: {
-      $geoWithin: {
-        $center: [[poi_coordinate.x, poi_coordinate.y], poi_coordinate.max_distance],
+  var db;
+  MongoClient.connect(uri, { useNewUrlParser: true }).then(function(client){
+    db = client.db('zupdb').collection('pois');
+    var poi_coordinate = req.body;
+    db.find({
+      coordinates: {
+        $geoWithin: {
+          $center: [[poi_coordinate.x, poi_coordinate.y], poi_coordinate.max_distance],
+        },
       },
-    },
-  }).toArray((err,results) => {
-    if(err) return console.log(err);
+    }).toArray((err,results) => {
+      if(err) return console.log(err);
 
-    res.send(results);
+      res.send(results);
+    })
+  }).catch(function(err){
+    console.log(err);
   })
 }
 

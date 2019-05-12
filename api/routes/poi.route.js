@@ -26,13 +26,19 @@ router.route('/find')
     validate(
       {
         body: {
-          x: Joi.number().integer().min(0).max(180).required(), // eslint-disable-line
-          y: Joi.number().integer().min(0).max(180).required(), // eslint-disable-line
+          x: Joi.number().integer().min(0).max(180).required(),
+          y: Joi.number().integer().min(0).max(180).required(),
           max_distance: Joi.number().integer().min(0).required(),
         }
       }
     ),
     poiController.findNear
   )
-  
+/**teste do teste**/
+  router.route('/test')
+    .get((err,res)=>{
+      res.send("teste");
+      console.log("teste");
+    });
+
 export default router;
