@@ -1,4 +1,5 @@
 import app from './index.js';
+import config from './configs/config';
 import request from 'supertest';
 import should from 'should';
 import chai, { expect } from 'chai';
@@ -17,7 +18,7 @@ const pois = [
 
 before(function (done) {
   var database;
-  const uri = "mongodb+srv://zupuser:zupuser@kpotzdb-4ygp2.mongodb.net/test?retryWrites=true";
+  const uri = config.mongo.uri;
   MongoClient.connect(uri, { useNewUrlParser: true }, (err,client) => {
     database = client.db('zupdb').collection('pois');
     database.deleteMany();
@@ -34,15 +35,6 @@ describe("Unit tests Zup POIs",function(){
     name: "OK Coordinates",
     coordinates: [100, 100]
   }
-
-  it('Test GET', (done) => {
-    request(app)
-      .get('/zupois/test')
-      .expect(200)
-      .end((err,res)=>{
-        done(err);
-      });
-  });
 
   it('Find all POIs', (done) => {
     request(app)
@@ -400,7 +392,7 @@ describe("Unit tests Zup POIs",function(){
       });
   });
   // --- requisite ----
-  it('Find near POI', (done) => {
+  it(`Find near POI: x=${validePoiNear.x}; y=${validePoiNear.y}; max_distance=${validePoiNear.max_distance}`, (done) => {
     request(app)
       .post('/zupois/find')
       .send(validePoiNear)

@@ -34,11 +34,5 @@ router.route('/find')
     ),
     poiController.findNear
   )
-/**teste do teste**/
-  router.route('/test')
-    .get((err,res)=>{
-      res.send("teste");
-      console.log("teste");
-    });
 
 export default router;

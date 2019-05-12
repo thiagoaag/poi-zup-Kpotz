@@ -1,6 +1,7 @@
 import {MongoClient} from 'mongodb';
+import config from '../../configs/config';
 
-const uri = "mongodb+srv://zupuser:zupuser@kpotzdb-4ygp2.mongodb.net/test?retryWrites=true";
+const uri = config.mongo.uri;
 
 function add(req, res){
   var db;
